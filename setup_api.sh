@@ -7,6 +7,4 @@ cp .env.template .env
 docker-compose up --build
 
 # Seed database and data lake with initial required data to use the API.
-# python seed_database.py
-
-#
+python seed_database.py

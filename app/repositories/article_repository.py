@@ -19,13 +19,16 @@ class ArticleRepository:
     def index_settings(self: ArticleRepository) -> dict:
         return {
             "settings": {
-                "index": {"number_of_shards": 2, "number_of_replicas": 2},
+                "index": {
+                    "number_of_shards": os.getenv("PRIMARY_SHARD_COUNT", 2),
+                    "number_of_replicas": os.getenv("REPLICA_SHARD_COUNT", 2),
+                },
                 "analysis": {
                     "analyzer": {
                         "content_analyzer": {
+                            "char_filter": ["html_strip", "token_char_filter"],
                             "tokenizer": "standard",
                             "filter": ["lowercase", "asciifolding", "kstem", "english_stop", "english_add_stop"],
-                            "char_filter": ["html_strip", "token_char_filter"],
                         }
                     },
                     "filter": {
@@ -63,12 +66,8 @@ class ArticleRepository:
         return os.getenv("CORPUS_BUCKET", "corpus")
 
     @property
-    def statistics_bucket(self: ArticleRepository) -> str:
-        return os.getenv("STATISTICS_BUCKET", "stats")
-
-    @property
     def term_statistics_key(self: ArticleRepository) -> str:
-        return os.getenv("TERM_STATISTICS_KEY", "term_statistics.parquet")
+        return os.getenv("TERM_STATISTICS_KEY", "stats/term_statistics.parquet")
 
     def create_index(self: ArticleRepository, force: bool = False) -> None:
         """Create an Elastic index for articles.

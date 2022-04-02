@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Final, Dict, Any
+from typing import Final, Dict, Any, List
 
 import numpy as np
 import pandas as pd
@@ -22,10 +22,17 @@ class StatisticsCalculation(ABC):
     def article_repository(self: StatisticsCalculation) -> ArticleRepository:
         return self._article_repository
 
-    def get_terms_with_highest_tf_idf(
-        self: StatisticsCalculation, article_content: str, limit: int
-    ) -> Dict[str, Dict[str, Any]]:
-        term_tf_idfs = self.calculate_term_tf_idfs(article_content)
+    def get_terms_with_highest_tf_idf(self: StatisticsCalculation, content: str, limit: int) -> List[Dict[str, Any]]:
+        """Find terms in the given content with highest TF-IDF.
+
+        Args:
+            content (str): The content in which terms are to be analyzed.
+            limit (int): Maximum number of terms to be returned.
+
+        Returns:
+            List[Dict[str, Any]]: A collection of terms and their TF-IDFs sorted by descending order of TF-IDFs.
+        """
+        term_tf_idfs = self.calculate_term_tf_idfs(content)
 
         return (
             term_tf_idfs.sort_values(by="tf-idf", ascending=False)
@@ -36,14 +43,23 @@ class StatisticsCalculation(ABC):
         )
 
     def calculate_term_idfs(self: StatisticsCalculation, article_count: int, term_df: pd.Series) -> pd.Series:
+        """Calculate IDF (inverse document frequency) of the given terms.
+
+        Args:
+            article_count (int): Number of articles (documents) in the dataset, i.e., `n` in IDF formula
+            term_df: a collection of DFs (document frequencies) for the given terms.
+
+        Returns:
+            pd.Series: A collection of IDFs for the given terms.
+        """
         return round(np.log((article_count + 1) / (term_df + 1)) + 1, self.IDF_DECIMAL_PLACE_COUNT)
 
     @abstractmethod
-    def calculate_term_tf_idfs(self: StatisticsCalculation, article_content: str) -> pd.DataFrame:
+    def calculate_term_tf_idfs(self: StatisticsCalculation, content: str) -> pd.DataFrame:
         """Calculate TF-IDF measure for each term in the given text content.
 
         Args:
-            article_content (str): The text content whose terms should be analyzed.
+            content (str): The text content whose terms should be analyzed.
 
         Returns:
             pd.DataFrame:

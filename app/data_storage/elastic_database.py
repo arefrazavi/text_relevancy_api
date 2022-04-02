@@ -9,17 +9,17 @@ from elasticsearch import Elasticsearch, helpers
 
 
 class ElasticDatabase:
-    client = None
+    _client: Optional[Elasticsearch] = None
 
     @classmethod
     def get_client(cls: Any[Elasticsearch]) -> Elasticsearch:
-        if not cls.client:
-            cls.client = Elasticsearch(
-                f"{os.getenv('ES_HOST')}:{os.getenv('ES_PORT')}",
+        if not cls._client:
+            cls._client = Elasticsearch(
+                os.getenv("ELASTICSEARCH_HOST", f"{os.getenv('ES_HOST')}:{os.getenv('ES_PORT')}"),
                 basic_auth=(str(os.getenv("ELASTIC_USERNAME")), str(os.getenv("ELASTIC_PASSWORD"))),
             )
 
-        return cls.client
+        return cls._client
 
     @classmethod
     def create_index(cls: Any[Elasticsearch], index: str, body: dict, force: bool = False) -> ObjectApiResponse[Any]:

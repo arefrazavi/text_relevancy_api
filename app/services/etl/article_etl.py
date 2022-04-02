@@ -80,9 +80,7 @@ class ArticleETL:
     def _prepare_statistics(self: ArticleETL) -> None:
         """Calculate article related statistics and store it in our data lake as static calculation."""
         term_statistics_path = Path(
-            f"{self.article_repository.data_lake_path}/"
-            f"{self.article_repository.statistics_bucket}/"
-            f"{self.article_repository.term_statistics_key}"
+            f"{self.article_repository.data_lake_path}/{self.article_repository.term_statistics_key}"
         )
 
         if not self.config["reset_statistics"] and term_statistics_path.exists():

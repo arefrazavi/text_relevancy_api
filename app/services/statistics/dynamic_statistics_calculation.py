@@ -10,8 +10,8 @@ from app.services.statistics.statistics_calculation import StatisticsCalculation
 class DynamicStatisticsCalculation(StatisticsCalculation):
     """A class for providing text related statistics dynamically (i.e., in the request time) from Elastic database."""
 
-    def calculate_term_tf_idfs(self: DynamicStatisticsCalculation, article_content: str) -> pd.DataFrame:
-        term_tfs = self.calculate_term_tfs(article_content)
+    def calculate_term_tf_idfs(self: DynamicStatisticsCalculation, content: str) -> pd.DataFrame:
+        term_tfs = self.calculate_term_tfs(content)
         term_dfs = self.calculate_term_dfs(list(term_tfs.keys()))
 
         term_statistics = pd.DataFrame(
