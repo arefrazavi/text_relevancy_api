@@ -9,8 +9,7 @@ from tqdm import tqdm
 
 from app.repositories.article_repository import ArticleRepository
 from app.services.statistics.static_statistics_calculation import StaticStatisticsCalculation
-from app.utility.data_extraction import download_dataset
-from app.utility.file_management import remove_directory_content, get_directory_file_paths
+from app.utility.file_management import remove_directory_content, get_directory_file_paths, decompress
 
 
 class ArticleETL:
@@ -73,9 +72,8 @@ class ArticleETL:
         if self.config["reset_data"]:
             remove_directory_content(destination_path)
 
-        # Skip downloading dataset if it already exits in data lake.
-        if not get_directory_file_paths(destination_path):
-            download_dataset(source_dataset_id, destination_path)
+        # Decompress files of the corpus zip file into the same directory
+        decompress(get_directory_file_paths(destination_path, "*.zip")[0])
 
     def _prepare_statistics(self: ArticleETL) -> None:
         """Calculate article related statistics and store it in our data lake as static calculation."""

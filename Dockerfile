@@ -12,7 +12,6 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH "${PYTHONPATH}:/code/app"
 
 # Install dependencies
-COPY kaggle.json /root/.kaggle/kaggle.json
 COPY ./requirements.txt /code/requirements.txt
 RUN pip install -U pip setuptools wheel
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt

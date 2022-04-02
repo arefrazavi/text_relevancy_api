@@ -1,6 +1,3 @@
-from pathlib import Path
-
-import kaggle
 import requests
 
 from bs4 import BeautifulSoup
@@ -39,11 +36,11 @@ def extract_content_from_page(page_url: str) -> str:
     return " ".join(soup.stripped_strings)
 
 
-def download_dataset(dataset_id: str, destination_path: Path) -> None:
-    """Download a Kaggle dataset into the destination path.
-
-    Args:
-        dataset_id (str): The Kaggle dataset ID.
-        destination_path (Path): Path to where the dataset should be stored.
-    """
-    kaggle.api.dataset_download_files(dataset=dataset_id, path=destination_path, unzip=True)
+# def download_dataset(dataset_id: str, destination_path: Path) -> None:
+#     """Download a Kaggle dataset into the destination path.
+#
+#     Args:
+#         dataset_id (str): The Kaggle dataset ID.
+#         destination_path (Path): Path to where the dataset should be stored.
+#     """
+#     kaggle.api.dataset_download_files(dataset=dataset_id, path=destination_path, unzip=True)
