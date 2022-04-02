@@ -1,0 +1,12 @@
+# Ignore default files/folders
+.idea
+term_relevancy_api.iml
+venv
+__pycache__
+
+# Ignore env files
+*.env
+
+# Ignore analyzers' temp files.
+.mypy_cache
+*_errors.txt
