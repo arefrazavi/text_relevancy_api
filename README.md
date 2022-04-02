@@ -15,19 +15,17 @@ Two different approaches have been implemented to calculate the TF-IDFs:
 ### Static Calculation    
 In this approach, the document frequency (DF) of each available term in the given corpus is calculated and stored in a (local) data lake.   
 Per each request, the TF-IDFs are calculated using the already processed DFs in the data lake.      
+Alternatively, IDFs could be used too, but since we have to calculate the IDF for the terms missing in the corpus anyway, it wouldn't make a difference in terms of performance.   
 
-One could store IDFs too, but since we have to calculate the IDF for the requested terms not available in the corpus anyway,    
-it wouldn't make a difference in terms of performance.   
-
-I stored IDFs on a local directory as our data lake for development.   
-In production, they should be stored in a cloud data lake (e.g. S3), or a data warehouse.
-A data warehouse (e.g., AWS redshift) offers a better performance usually.
+In this project, the statistics (i.e., DFs) are stored in a local directory as our data lake for development.   
+In production, the statistics should be stored in a cloud data lake (e.g., S3), or a data warehouse.
+A data warehouse (e.g., AWS redshift) could offer a faster read performance, because for a typical data lake, we may have to load the whole data and then preform a query.
 
 ### Dynamic Calculation
-In this approach, all the calculations (i.e., TF-IDFs, TFs, and DFs) are done per request by performing searches 
-in a fast NoSQL document-oriented database called Elasticsearch.    
+In this approach, all the calculations (i.e., TF-IDFs, TFs, and DFs) are done per request (on demand) by performing searches 
+in a fast NoSQL document-oriented database, called Elasticsearch.    
 
-This is a much better solution when the database of documents grows constantly.     
+This is a better solution, practically when the database of documents grows constantly.     
 
 ### 1.2 How to run the API
 Initially, you need to set up the API application by running the following script.      
@@ -49,7 +47,7 @@ Alternatively, you can download it manually into the relative `data_lake/corpus`
 sudo apt-get install docker-compose
 ```
 
-3. Initialize .env file. You can change the variables and leave it as it is.
+3. Initialize .env file. You can change the variables or leave it as it is.
 ```shell
 cp .env.template .env
 ```
