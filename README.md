@@ -103,8 +103,8 @@ Hence, we have two main design choices:
 1) A distributed data warehouse with a transactional layer (e.g., AWS Redshift, Google BigQuery).   
    In the simplest form, we need a table of articles and a table for the statistics (e.g., IDF or DF).      
    Inserting a new article should update both of these tables in an atomic transaction to ensure the consistency of data.   
-   If we want to define some solid relations between articles and other potential entities on top of which aggregation can be done, this design is a better choice.     
-   ***AWS Redshift*** is a good choice for this scenario. It also has columnar storage format can speed up the transactions.         
+   If we want to define relationships between articles and other potential entities on top of which aggregation can be done, this design is a better choice.     
+   ***AWS Redshift*** is a good choice for this scenario. It also has columnar storage format that can speed up the transactions.         
 
 2) A distributed NoSQL database (e.g, Elasticsearch, Cassandra):   
    In this case, we can store the articles per request, and do the calculations on demand.  
@@ -115,16 +115,14 @@ Hence, we have two main design choices:
 #### API Design
 For API side, we can still use FastAPI framework because of its high performance.  
 But we should use asynchronous API calls so that the TF-IDF results can be returned, 
-without having to wait for storing new article and/or updating the statistics. 
+without having to wait for storing a new article and/or updating the statistics. 
 
 ### 2.2 How to deploy the system on AWS.
 First, we need to setup an Elastic Cloud cluster on AWS to host our data.    
-The advantage of Elastic Cloud is that it can manage the shards and nodes easily.   
+The advantage of using Elastic Cloud is that it can manage the shards and nodes automatically.   
 Our code in another instance can connect to this service via Elasticsearch REST API.     
 
 Second, we need to deploy our API code in EC2 instance(s). 
 Another serverless alternative for API deployment would be deploying the API into the Amazon API Gateway by adding a Lambda function that runs the API code.
 
 We also need to integrate our API with an Application Load Balancer to distribute the traffic across multiple targets (e.g., EC2 instances).
-
-
