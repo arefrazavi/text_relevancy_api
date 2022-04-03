@@ -2,6 +2,19 @@ import requests
 from urllib import parse
 
 from bs4 import BeautifulSoup
+import validators
+
+
+def validate_url(url: str) -> bool:
+    """Check if the given URL is valid or not.
+
+    Args:
+        url (str):
+
+    Returns:
+        bool:
+    """
+    return validators.url(parse.unquote(url))
 
 
 def scrape_page(page_url: str) -> str:

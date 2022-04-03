@@ -2,8 +2,9 @@ from typing import List, Dict, Any
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.exceptions import HTTPException
 
-from app.utility.data_extraction import extract_content_from_page
+from app.utility.data_extraction import extract_content_from_page, validate_url
 
 from app.services.statistics.dynamic_statistics_calculation import DynamicStatisticsCalculation
 from app.services.statistics.static_statistics_calculation import StaticStatisticsCalculation
@@ -24,6 +25,9 @@ def get_terms_with_highest_tf_idf(url: str, limit: int, dynamic: bool = False) -
     Returns:
         Dict[str, List[Dict[str, Any]]]: A collection of terms and their TF-IDFs sorted by descending order of TF-IDFs.
     """
+    if not validate_url(url):
+        raise HTTPException(status_code=400, detail="URL is invalid.")
+
     article_content = extract_content_from_page(url)
     calculation_service = DynamicStatisticsCalculation() if dynamic else StaticStatisticsCalculation()
 
@@ -40,6 +44,9 @@ def get_page_content(url: str) -> Dict[str, str]:
     Returns:
         Dict[str, str]:
     """
+    if not validate_url(url):
+        raise HTTPException(status_code=400, detail="URL is invalid.")
+
     return {"page_content": extract_content_from_page(url)}
 
 

@@ -31,3 +31,9 @@ def test_page_content() -> None:
 
     assert response.status_code == 200
     assert "tf–idf" in response.json()["page_content"]
+
+    # Invalid url.
+    invalid_url = "http:tfidf"
+    response = client.get(f"/page_content?url={invalid_url}")
+
+    assert response.status_code == 400
