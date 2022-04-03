@@ -1,8 +1,4 @@
 SHELL := /bin/bash
-# NOTE: this should always be the current target version that will be used in making virtualenvs
-# we use the Ubuntu binary naming convention since that is our target environment, but this may not work
-# in environments where the binary is named differently - such as "python38"
-PYTHON := python3.8
 
 ifndef VERBOSE
 .SILENT:

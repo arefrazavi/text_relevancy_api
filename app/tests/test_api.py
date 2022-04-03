@@ -14,7 +14,7 @@ def test_static_tfidf() -> None:
 
     result = response.json()
     assert "terms" in result
-    assert "idf" in result.get("terms")
+    assert "idf" in map(lambda term_stats: term_stats["term"], result.get("terms"))
 
 
 def test_dynamic_tfidf() -> None:
@@ -23,11 +23,11 @@ def test_dynamic_tfidf() -> None:
 
     result = response.json()
     assert "terms" in result
-    assert "idf" in result.get("terms")
+    assert "idf" in map(lambda term_stats: term_stats["term"], result.get("terms"))
 
 
 def test_page_content() -> None:
     response = client.get(f"/page_content?url={page_url}")
 
     assert response.status_code == 200
-    assert "tf–idf" in response.json()
+    assert "tf–idf" in response.json()["page_content"]

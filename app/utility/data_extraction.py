@@ -1,4 +1,5 @@
 import requests
+from urllib import parse
 
 from bs4 import BeautifulSoup
 
@@ -12,7 +13,7 @@ def scrape_page(page_url: str) -> str:
     Returns:
         str: The HTML text content
     """
-    response = requests.get(page_url)
+    response = requests.get(parse.unquote(page_url))
 
     return response.text
 
