@@ -51,21 +51,15 @@ sudo apt-get install docker-compose
 ```shell
 cp .env.template .env
 ```
-
 4. Setup dockerized environment.
 ```shell
 docker-compose up --build -d
 ```
 
-5. Go to the API docker container.
-We have to enter the API container shell to run the python commands, unless we install the requirements locally.
+5. Seed database and data lake with initial required data to use the API.
 ```shell
-docker exec -it $(docker ps -aqf "name=text_relevancy_api_web") /bin/bash
-```
-
-6. Seed database and data lake with initial required data to use the API.
-```shell
-python seed_database.py
+# We have to enter the API container shell to run the python commands, unless we install the requirements locally.
+docker exec -it $(docker ps -aqf "name=text_relevancy_api_web") python seed_database.py
 ```
 
 After the setup, the API endpoint should be accessible at: http://127.0.0.1:8000/   
@@ -79,11 +73,7 @@ Tests were first done on a small sample of articles in the corpus to make the de
 I also wrote a few API tests to verify the result for both dynamic and static calculations.
 You can run the following commands to run the tests:
 ```shell
-# Go to the API docker container. 
-docker exec -it $(docker ps -aqf "name=text_relevancy_api_web") /bin/bash
-
-# Run the tests
-pytest
+docker exec -it $(docker ps -aqf "name=text_relevancy_api_web") pytest
 ```
 
 ***Important Note***:     

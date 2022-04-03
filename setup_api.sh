@@ -17,8 +17,7 @@ cp .env.template .env
 # 4. Setup the API by creating the environment and installing the requirements.
 docker-compose up --build -d
 
-# 5. Go to the API docker container. You don't necessarily have to do that if you did the step 0.
 docker exec -it $(docker ps -aqf "name=text_relevancy_api_web") /bin/bash
 
-# 6. Seed database and data lake with initial required data to use the API.
-python seed_database.py
+# 5. Seed database and data lake with initial required data to use the API.
+docker exec -it $(docker ps -aqf "name=text_relevancy_api_web") python seed_database.py
